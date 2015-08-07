@@ -1,0 +1,1 @@
+If you are using Gradle build files, the minSdkVersion setting in the build file overrides the manifest settings

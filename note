@@ -1,0 +1,295 @@
+☻ 开放手机联盟：Open Handset Alliance:是美国 Google 公司与 2007 年 11 月 5 日宣布组建的一个全球性的联盟组织。这一联盟将会支持 Google 发布的 Android 手机操作系统或者应用软件,共同开发名为 Android 的开放源代码的移动系统。开放手机联盟包括手机制造商、手机芯片厂商和移动运营商几类。目前,联盟成员数量已经达到了 43 家。
+
+☻ Android虚拟机Dalvik VM不同在于普通的java虚拟机， 前者基于堆栈，而后者则基于寄存器！基于寄存器的虚拟机对于更大的 程序来说，在它们编译的时候，花费的时间更短。每一个Android应用程序都在它自己的进程中运行，都拥有一个独立的Dalvik虚拟机实例
+
+☻ 一个Android应用程序可能的四个组成部分：
+    �  Activity
+    �  Intent Receiver
+    �  Service
+    �  Content Provider
+
+☻ 隐藏在每个应用后面的是一系列的服务和系统, 其中包括;
+    � 丰富而又可扩展的视图(Views),可以用来构建应用程序, 它包括列表(lists), 网 格 (grids), 文本框(text boxes),按钮 ( buttons), 甚至可嵌入的 web 浏览器。
+    � 内容提供器(Content Providers)使得应用程序可以访问另一个应用程序的数据(如联系人数据库), 或者共享它们自己的数据
+    � 资源管理器(Resource Manager)提供 非代码资源的访问,如本地字符串,图形,和布局文件( layoutfiles )。
+    � 通知管理器 (Notification Manager) 使得应用程序可以在状态栏中显示自定义的提示信息。
+    � 活动管理器( Activity Manager) 用来管理应用程序生命周期并提供常用的导航回退功能。
+
+
+☻ Android 内核
+    � Linux 内核版本 2.6
+    � 位于硬件和软件堆之间的抽象层
+    � 核心服务:安全机制、内存管理、进程管理、网络、硬件驱动。
+    注： 这个操作系统并非类 GNU/Linux 的,因为其系统库,系统初始化和编程接口都和标准的 Linux 系统是有所不同的。
+
+☻ 运行时环境
+    � 核心库提供的 Java 功能
+    � Dalvik 虚拟机依赖于 Linux 内核,例如线程或底层内存管理
+    � 设备可以运行多个 Dalvik 虚拟机,每一个 Android 应用程序在它自己的 Dalvik VM 实例中运行
+    � VM 执行优化的 Dalvik 可执行文件(.dex)
+    � Dx-工具把编译过的 Java 文件转换为 dex 文件
+
+☻ Activity: 
+    代表一个用户所能看到的屏幕,Activity 主要是处理一个应用的整体性工作,例如,监听系统事件(按键事件、触摸屏事件等)、为用户显示指定的 View,启动其他 Activity 等。所有应用的 Activity都继承于 android.app.Activity 类,该类是 Android 提供的基层类,其他的 Activity 继承该父类后,通过 Override父类的方法来实现各种功能,当需要子Activity返回值时，需调用startActivityForResult(Intent toIntent， int requestCode)启动子Activity，此外，还需要重写父Activity中的protected public onActivityResult(int requestCode，int resultCode，Intent intent)方法(� 第一个参数是你开启请求Intent时的对应请求码,可以自己定义。� 第二个参数是目标Activity返回的验证结果码。� 第三个参数是目标Activity返回的Intent)，以处理返回值。在多个Activity之间切换时，注意每个Activity都应在AndroidManifest.xml中有所声明。
+
+☻ Intent:
+    调用Android的专有类Intent进行架构屏幕之间的切换，数据传递，Intent描述应用想要做什么。Intent数据结构有两个重要组成部分：动作和动作对应的数据。典型的动作类型有典型的动作类型有:MAIN (activity的门户)、VIEW、PICK、EDIT 等,动作对应的数据则是以URI的形式表示
+
+IntntFilter
+    IntentFilter用于描述一个Activity或者IntentReceiver能够处理哪些Intent，当一个Activity通过startActivity(Intent myIntent)等方法启动另一个Activity时，系统会在所有安装的医用程序中定义的IntentFilter中查找，找到最适合处理myIntent的Activity并启动。IntentFilter需要在AndroidManifest.xml中定义。当startActivity()方法被调用，将触发分析myIntent的动作，这种机制有两个关键好处：
+    �  Activities很容易调用其他程序的功能。
+    �  Activities可以在任何时候被一个具有相同IntentFilter的新的Activity取代 
+
+☻ IntentReceiver
+    IntentReceiver能够监听感兴趣的外部事件，例如电话呼入，数据网络可用，或者到晚上。当事件发生时，使用NotificationManager通知用户，但它并不能生成一个UI。IntentReceiver可以在AndroidManifest.xml中注册，也可以在代码中使用Context.registerReceiver()进行注册。当一个IntentReceiver被触发时，系统会在需要的时候自动启动应用。各种应用还可以使用Context.broadcastIntent()将自己的intentBroadcast广播给其他程序。
+
+☻ Content Provider
+    Android 应用程序能够将它们的数据保存到文件、SQLite数据库中,甚至是任何有效的设备中。然而，所有被一个应用程序创建的偏好设置，文件和数据库都是私有的，正常情况下一个应用程序不能读取另一个应用程序的db文件。当你想将你的应用数据与其它的应用共享时,内容提供器就可以发挥作用了。因为内容提供器类实现了一组标准的方法,从而能够让其它的应用保存或读取此内容提供器处理的各种数据类型。在 Android 中每一个应用都运行在各自的进程中,当你的应用需要访问其他应用的数据时,也就需要数据在不同的虚拟机之间传递,这样的情况操作起来可能有些困难,ContentProvider 正是用来解决在不同的应用包之间共享数据的工具。
+    Android 本地 Content Provider 包括:
+    � CallLog:地址和接收到的电话信息
+    � Contact.People.Phones:存储电话号码
+    � Setting.System:系统设置和偏好设置
+    � 等等
+
+☻ Service
+    服务是运行在后台的一段代码。它可以运行在它自己的进程,也可以运行在其他应用程序的上下文(context)里面,这取决于自身的需要。其他的组件可以绑定到一个服务(Service)上面,通过远程过程调用(RPC)来调用这个方法。例如:媒体播放器的服务,当用户退出媒体选择用户界面,仍然希望音乐可以继续播放,这时就是由服务(Service)来保证当用户界面关闭时音乐继续播放的。
+    � 如何使用服务
+      • 第一种是通过调用 Context.startServece()启动,调用 Context.stoptService()结束,startService()可以传递参数给 Service。
+      • 第二种方式是通过调用 Context.bindService() 启动,调用 Context.unbindService() 结束,还可以通过ServiceConnection 访问 Service。二者可以混合使用,比如说我可以先 startServece()再 unbindService()。
+    � Service 的生命周期
+      • startService() 后,即使调用 startService()的进程结束了, Service 仍然还存在,知道有进程调用stoptService(),或者 Service 自己自杀(stopSelf())就没法了
+      • bindService()后,Service 就和调用 bindService()的进程同生共死,也就是说当调用 bindService()的进程死了,那么它 bind 的 Service 也要跟着被结束,当然期间也可以调用 unbindService()让 Service 结束
+      • 两种方式混合使用时,比如说你 startService()了,我 bindService()了,那么只有你 stoptService()了而且我也 unbindService()了,这个 Service 才会被结束。
+
+☻ Android UI布局
+    � Activity
+      • Android应用程序的基本功能的单元
+      • 本身没有任何屏幕存在 
+
+    � android.view.View
+      • 为指定的屏幕矩形区域存储布局和内容
+      • 处理尺寸和布局，绘制，焦点改变，翻屏，按键，手势 
+      • widget基类 
+        文本   TextView       输入框   EditView
+        输入法 InputMethod    活动方法 MovementMethod
+        按钮   Button         单选按钮 RadioButton
+        复选框 Checkbox       滚动视图 ScollView
+
+    � android.view.Viewgroup
+      • 包含并管理下级系列的Views和其他Viewgroup 
+      • 布局的基类
+      • 每个Viewgroup类使用一个继承ViewGroup.LayoutParams的嵌套类，该类包含定义了子节点View的尺寸和位置的属性类型。 
+
+    � 普通布局对象
+      • FrameLayout  最简单的布局对象，可以在屏幕上故意保留空白空间，所有资源素都订到屏幕的左上角，不能为子元素制定位置
+      • LinearLayout 在一个方向上(水平或者垂直)上对齐所有子元素
+      • TableLayout  把子元素放入到行与列中，不显示行、列或是单元格边界线，单元格不能跨行
+      • AbsoluteLaout 使子元素能够在指明确切的X/Y坐标，(0,0)是屏幕的左上角 
+      • RelativeLayout  让子元素制定他们相对于其他元素(通过ID来指定)的位置，或相对于父布局对象 
+
+    � android.graphic.Color颜色变换
+      黑色    Color.BLACK
+      蓝色    Color.BLUE
+      青绿    Color.CYAN
+      灰黑    Color.DKGRAY
+      灰色    Color.GRAY
+      绿色    Color.GREEN
+      浅灰    Color.LTGRAY
+      红紫    Color.MAGENTA
+      红色    Color.RED
+      透明    Color.TRANSPARENT
+      白色    Color.WHITE
+      黄色    Color.YELLOW
+
+   � android.graphics.Typeface 字体风格
+     • int Style 类型
+      BOLD         粗体
+      BOLD_ITALIC  粗斜体
+      ITALIC       斜体
+      NORMAL       普通
+
+     • Typeface 类型
+      DEFAULT      默认字体
+      DEFAULT_BOLD 默认粗体
+      MONOSPACE    单间隔字体
+      SANS_SERIF   无衬线字体
+      SERIF        衬线字体 
+
+      Typeface.create(Typeface family,int style)
+         创建一个混合型新的字体:有 4*5 中搭配
+      Typeface.setTypeface (Typeface tf, int style)
+         设置一个混合型字体:有 4*5 中搭配
+      Typeface.setTypeface(Typeface tf)
+         设置一个只有 Typeface 风格的字体:有五种形式
+ 
+
+
+
+
+
+☻ android提供了一套扩展的JAVA类库，类库分为若干个包：
+重要包的描述:
+   android.app :提供高层的程序模型、提供基本的运行环境
+   android.content :包含各种的对设备上的数据进行访问和发布的类
+   android.database :通过内容提供者浏览和操作数据库
+   android.graphics :底层的图形库,包含画布,颜色过滤,点,矩形,可以将他们直接绘制到屏幕上.
+   android.location :定位和相关服务的类
+   android.media :提供一些类管理多种音频、视频的媒体接口
+   android.net :提供帮助网络访问的类,超过通常的 java.net.* 接口
+   android.os :提供了系统服务、消息传输、IPC 机制
+   android.opengl :提供 OpenGL 的工具
+   android.provider :提供类访问 Android 的内容提供者
+   android.telephony :提供与拨打电话相关的 API 交互
+   android.view :提供基础的用户界面接口框架
+   android.util :涉及工具性的方法,例如时间日期的操作
+   android.webkit :默认浏览器操作接口
+   android.widget :包含各种 UI 元素(大部分是可见的)在应用程序的屏幕中使用
+
+
+
+
+☻ Android 模拟器参数
+参数格式
+emulator [option] [-qemu args]
+option 选项
+-sysdir <dir>           为模拟器在<dir>目录中搜索系统硬盘镜像
+-system <file>          为模拟器从<file>文件中读取初始化系统镜像
+-datadir <dir>          设置用户数据写入的目录
+-kernel <file>          为模拟器设置使用指定的模拟器内核
+-ramdisk <file>         设置内存 RAM 镜像文件
+-image <file>           废弃,使用 -system <file> 替代
+-init-data <file>       设置初始化数据镜像 (默认为 <system>/userdata.img)
+-initdata <file>        和 "-init-data <file>"使用方法一致
+-data <file>            设置数据镜像 (默认为 <datadir>/userdata-qemu.img)
+-partition-size <size>  system/data 分区容量大小 (MB)
+-cache <file>           设置模拟器缓存分区镜像 (默认为 零时文件)
+-no-cache               禁用缓存分区
+-nocache                与"-no-cache"使用方法相同
+-sdcard <file>          指定模拟器 SDCard 镜像文件 (默认为 <system>/sdcard.img)
+-wipe-data              清除并重置用户数据镜像 (从 initdata 拷贝)
+-avd <name>             指定模拟器使用 Android 虚拟设备
+-skindir <dir>          设置模拟器皮肤 在<dir>目录中搜索皮肤 (默认为 <system>/skins 目录)
+-skin <name>            选择使用给定的皮肤
+-no-skin                不适用任何模拟器皮肤
+-noskin                 使用方法与"-no-skin"相同
+-memory <size>          物理 RAM 内存大小(MB)
+-netspeed <speed>       设置最大网络下载、上传速度
+-netdelay <delay>       网络时延模拟
+-netfast                禁用网络形态
+-tarce <name>           代码配置可用
+-show-kernel            显示内核信息
+-shell                  在当前终端中使用根 Shell 命令
+-no-jni                 Dalvik 运行时禁用 JNI 检测
+-nojni                  使用方法与"-no-jni"相同
+-logcat <tag>         * 输出给定 tag 的 Logcat 信息(默认为<system>/ramdisk.img)
+-no-audio               禁用音频支持
+-noaudio                与"-no-audio"用法相同
+-audio <backend>        使用指定的音频 backend
+-audio-in <backend>     使用指定的输入音频 backend
+-audoi-out <backend>    使用指定的输出音频 backend
+-raw-keys               禁用 Unicode 键盘翻转图
+-radio                  重定向无线模式接口到个性化设备
+-port <port>            设置控制台使用的 TCP 端口
+-ports <consoleport>,<adbport> 设置控制台使用的 TCP 端口和 ADB 调试桥使用的 TCP 端口
+-onion <image>          在屏幕上层使用覆盖 PNG 图片
+-onion-alpha <%age>     指定上层皮肤半透明度
+-onion-rotation 0|1|2|3 指定上层皮肤旋转
+-scale <scale>          调节模拟器窗口尺寸(三种:1.0-3.0、dpi、auto)
+-dpi-device <dpi>       设置设备的 resolution (dpi 单位) (默认 165)
+-http-proxy <proxy>     通过一个 HTTP 或 HTTPS 代理来创建 TCP 连接
+-timezone <timezone>    使用给定的时区,而不是主机默认的
+-dns-server <server>    在模拟系统上使用给定的 DNS 服务
+-cpu-delay <cpudelay>   调节 CUP 模拟
+-no-boot-anim         * 禁用动画来快速启动
+-no-window              禁用图形化窗口显示
+-version                显示模拟器版本号
+-report-console <socket> 向远程 socket 报告控制台端口
+-gps <device>           重定向 GPS 导航到个性化设备
+-keyset <name>          指定按键设置文件名
+-shell-serial <device>  根 shell 的个性化设备
+-old-system             支持旧版本(pre 1.4)系统镜像
+-tcpdump <file>       * 把网络数据包捕获到文件中
+-bootchart <timeout>    bootcharting 可用
+-qemu args....          向 qemu 传递参数
+-qemu -h                显示 qemu 帮助
+-verbose                和"-debug-init"相同
+-debug <tags>         * 可用、禁用调试信息
+-debug-<tag>          * 使指定的调试信息可用
+-debug-no-<tag>       * 禁用指定的调试信息
+-help                   打印出该帮助文档
+-help-<option>          打印出指定 option 的帮助文档
+-help-disk-images       关于硬盘镜像帮助
+-help-keys              支持按钮捆绑(手机快捷键)
+-help-debug-tags      * 显示出-debug <tag>命令中的 tag 可选值
+-help-char-devices      个性化设备说明
+-help-environment     * 环境变量
+-help-keyset-file       指定按键绑定设置文件
+-help-virtula-device    虚拟设备管理
+-help-sdk-images        当使用 SDK 时关于硬盘镜像的信息
+-help-build-images      当构建 Android 时,关于硬盘镜像的信息
+-help-all               打印所有帮助信息
+
+
+
+
+☻ android进程优先级顺序:
+    1 前台进程:
+        包含一个前台 Activity、包含一个正在运行的广播接收器、正在运行的服务(当前用户所需的 Activity、正在屏幕顶层运行的 Activity)
+    2 可视进程:
+        包含一个可视化的 Activity(Activity 可视的,但是不是在前台的(onPause))、例如显示在一个前台对话框之后的以前的 Activity)
+    3 服务进程:
+        包含一个被开启的服务(处理服务,不是直接可视,例如媒体播放器,网络上传、下载)
+    4 后台进程:
+        包含一个不可视的 Activity(带有一个当前不可视的 Activity、可以在任意时刻杀死该进程来回收内存)
+    5 空进程
+        没有持有任何应用程序组件
+
+☻ 文件操作
+  �读文件
+   Context.openFileInput(String name)打开一个与应用程序联系的私有文件输入流,当文件不存在时抛出 FileNotFoundException 异常
+   FileInputStream in = this.openFileInput("test2.txt");//打开文件"test2.txt"
+   ......
+   in.close();//关闭输入流
+  �写文件
+   Context.openFileOutput(String name,int mode)开启一个与应用程序联系的私有文件输出流,当文件不存在时该文件将被创建,文件输出流可以在添加模式中打开,这意味新的数据将被添加到文件的末尾
+   FileOutputStream out = this.openFileOutput("test2.txt", MODE_APPEND );//打开文件"test2.txt"进行写操作 、使用 MODE_APPEND 在添加模式中打开文件
+   ......
+   out.close();//关闭输出流
+  �读取静态文件
+   要打开打包在应用程序中的静态文件,使用 Resources.openRawResource(R.raw.mydatafile)该文件必须放在文件夹 res/raw/中
+   InputStreamin = this.getResources().openRawResource(R.raw.my);
+   ......    //获得Context资源
+   in.close();//关闭输入流
+
+
+=====
+BroadCastRecervier
+两种注册方式, 在Manifest文件中注册,亦可运行时使用registerReceiver()函数注册.要注意两种注册方式中在BroadCast.OnReceive()函数中的context参数的不同
+
+=====
+使用系统剪切板
+	ClipboardManager clipboard_in = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+	clipboard_in.setPrimaryClip(ClipData.newPlainText("label", "My name is..."));
+		
+	ClipboardManager clipboard_out = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+	ClipData data = clipboard_out.getPrimaryClip();
+=====
+Base64 用于编码
+
+=====
+继承Application类保存全局变量
+=====
+获取LayoutInflater的方法有：
+a. LayoutInflater inflater =  getLayoutInflater(); //Activity自带的方法
+b. LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVERCE);
+c. LayoutInflater inflater = LayoutInflater.from(context);
+=====
+SharedPreferences preferences = context.getSharedPreferences("fileName",0);
+
+=====
+View.setTag()可用于保存一些参数， 比如说后面会用到的某个id
+
+�
+☻ 
+♠
+•
